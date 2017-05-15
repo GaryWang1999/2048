@@ -4,14 +4,11 @@ try:
     import simplegui
 except ImportError:
     import SimpleGUICS2Pygame.simpleguics2pygame as simplegui
-import math
-import random
-import simplegui
 
-board=[[2,0,2,4],
+board=[[2,2,2,2],
        [0,0,2,2],
        [2,2,0,0],
-       [8,16,16,8]]
+       [16,16,16,8]]
 vis_board=[[0,0,0,0],
            [0,0,0,0],
            [0,0,0,0],
@@ -24,7 +21,35 @@ def merge(key):
     elif key == simplegui.KEY_MAP['down']:
         print 1
     elif key == simplegui.KEY_MAP['left']:
-        for i in range(4):
+        limitless_merge()
+        print_result()
+    elif key == simplegui.KEY_MAP['right']:
+        rotate_right()
+        limitless_merge()
+        rotate_right()
+        print_result()
+def rotate_right():
+    for i in range (4):
+        temp=board[i][0]
+        board[i][0]=board[i][3]
+        board[i][3]=temp
+        temp=board[i][1]
+        board[i][1]=board[i][2]
+        board[i][2]=temp 
+def rotate_up():
+    temp=[[0,0,0,0],
+          [0,0,0,0],
+          [0,0,0,0],
+          [0,0,0,0]]
+    for i in range (4):
+        m=0
+        for j in range(4):
+            temp[m][i]=board[i][j]
+        m=m+1        
+        
+def limitless_merge():
+    global board,vis_board
+    for i in range(4):
             for j in range(1,4):
                 m=j
                 if (board[i][j]==0):
@@ -57,13 +82,13 @@ def merge(key):
                             continue
                         else:
                             board[i][m]=0
-        vis_board=[[0,0,0,0],
-           [0,0,0,0],
-           [0,0,0,0],
-           [0,0,0,0]]
-        for i in range (4):
-            print board[i]
-    elif key == simplegui.KEY_MAP['right']:
-        print 1
+    vis_board=[[0,0,0,0],
+                   [0,0,0,0],
+                   [0,0,0,0],
+                   [0,0,0,0]]
+def print_result():
+    for i in range (4):
+        print board[i]
+    
 frame = simplegui.create_frame("Pong", 1, 1)
 frame.set_keydown_handler(merge)
