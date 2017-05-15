@@ -1,11 +1,18 @@
 #Pengpeng Wang and Micheal Hu on 5.15 2017
 #2048
-try:
-    import simplegui
-except ImportError:
-    import SimpleGUICS2Pygame.simpleguics2pygame as simplegui
+# import modules
+import os
+import pygame
+
+# pygame specific locals/constants
+from pygame.locals import *
+
+# some resource related warnings
+if not pygame.font: print('Warning, fonts disabled')
+if not pygame.mixer: print('Warning, sound disabled')
 import random
 import math
+pygame.init()
 
 board=[[0,0,0,0],
        [0,0,0,0],
@@ -175,8 +182,7 @@ def draw(canvas):
                     val = 0
                 else:
                     val = int(math.log(tile, 2))
-                canvas.draw_image(simplegui.load_image('http://codeskulptor-assets.commondatastorage.googleapis.com/assets_2048.png'),
-                                  #copy 
+                canvas.draw_image(simplegui.load_image('assets_2048.png'),
                     [HALF_TILE_SIZE + val * TILE_SIZE, HALF_TILE_SIZE],
                     [TILE_SIZE, TILE_SIZE],
                     [col * TILE_SIZE + HALF_TILE_SIZE + BORDER_SIZE,
