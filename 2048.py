@@ -6,18 +6,21 @@ except ImportError:
     import SimpleGUICS2Pygame.simpleguics2pygame as simplegui
 import random
 import math
-import codeskulptor
 
 board=[[0,0,0,0],
        [0,0,0,0],
        [0,0,0,0],
        [0,0,0,0]]
+       #initialize a board to record the number
 
 vis_board=[[0,0,0,0],
            [0,0,0,0],
            [0,0,0,0],
            [0,0,0,0]]
-merge_num=1
+           #create a two-dimensional list to record if the board is changed
+merge_num=0
+# int a number to record how many times you made mergence
+# which should be the main goal of the game I think-make more mergences
 
 # Tile Images
 IMAGENAME = "assets_2048.png"
@@ -28,6 +31,11 @@ change=0
             
     
 def merge(key):
+    '''
+    I first write the function of merge with the direction of left
+    then tranform it into a function called limitless_merge
+    The function is similar, therefore I rotate the 2D list and merge it to left and rotate it back
+    '''
     global board,vis_board,change    
     if key == simplegui.KEY_MAP['up']:
         rotate_up()
@@ -58,6 +66,9 @@ def merge(key):
         print_result()
     
 def rotate_right():
+    '''
+    rotate function for merging to right
+    '''
     for i in range (4):
         temp=board[i][0]
         board[i][0]=board[i][3]
@@ -66,6 +77,9 @@ def rotate_right():
         board[i][1]=board[i][2]
         board[i][2]=temp 
 def rotate_up():
+    '''
+    rotate function for merging to up or down
+    '''
     global board
     temp=[[0,0,0,0],
           [0,0,0,0],
@@ -90,10 +104,11 @@ def limitless_merge():
                     if(j<0):
                         break
                     j=j-1        
-                #if j=-1, [i][j]前面全是0
-                if (j==-1):#前面全是0
+                #if j=-1, then all the number before [i][j]is 0
+                if (j==-1):
                     board[i][0]=board[i][m]
                     board[i][m]=0
+                    #so we can just move it there
                     change=1
                 else :
                     if(board[i][j]==board[i][m]):
@@ -109,7 +124,7 @@ def limitless_merge():
                                 continue
                             else:
                                 board[i][m]=0
-                    else:#和前面数值不等
+                    else:#not equal to the number before it
                         board[i][j+1]=board[i][m]
                         if(j+1==m):
                             continue
@@ -127,6 +142,9 @@ def print_result():
     print
     
 def add():
+    '''
+    randomly add a 2 or 4 tile by giving 0 a number
+    '''
     for i in range(10000):
             location_i=random.randrange(0,3)
             location_j=random.randrange(0,3)
@@ -145,6 +163,10 @@ def new_game():
     l2.set_text('Merge number '+str(merge_num))
     
 def draw(canvas):
+    '''
+    the code copy from the poc_2048_gui provided by rice university on cousera
+    with a little bit change
+    '''
     global merge_num
     for row in range(4):
         for col in range(4):
@@ -153,7 +175,7 @@ def draw(canvas):
                     val = 0
                 else:
                     val = int(math.log(tile, 2))
-                canvas.draw_image(simplegui.load_image(codeskulptor.file2url(IMAGENAME)),
+                canvas.draw_image(simplegui.load_image('http://codeskulptor-assets.commondatastorage.googleapis.com/assets_2048.png'),
                                   #copy 
                     [HALF_TILE_SIZE + val * TILE_SIZE, HALF_TILE_SIZE],
                     [TILE_SIZE, TILE_SIZE],
